@@ -47,6 +47,7 @@ class CartProduct(models.Model):
     def __str__(self):
         return f"Продукт {self.product.title}"
 
+
 class Cart(models.Model):
     owner = models.ForeignKey("Customer", verbose_name="Владелец", on_delete=models.CASCADE)
     products =models.ManyToManyField(CartProduct, blank=True, related_name="related_cart")
@@ -56,14 +57,14 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
-class Customer(models.Model):
 
+class Customer(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, verbose_name="Номер телефона")
     adress = models.CharField(max_length=255, verbose_name="Адрес")
 
     def __str__(self):
-        return f"окупатель {self.user.first_name} {self.user.last_name}"
+        return f"Покупатель {self.user.first_name} {self.user.last_name}"
 
 
 
