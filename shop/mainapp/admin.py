@@ -1,13 +1,11 @@
 from django.contrib import admin
 from .models import *
-from django import forms
+from django.forms import ModelChoiceField
 
 
 """Конструкция для ограничения категорий для товара"""
 # Для ноутбуков
 
-class NotebookCategoryChoiceField(forms.ModelChoiceField):
-    pass
 
 
 # @admin.register(Notebook)
@@ -16,15 +14,13 @@ class NotebookAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
-            return NotebookCategoryChoiceField(Category.objects.filter(slug='notebooks'))
+            return ModelChoiceField(Category.objects.filter(slug='notebooks'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 
 # Для телефонов
 
-class PhoneCategoryChoiceField(forms.ModelChoiceField):
-    pass
 
 
 # @admin.register(Phone)
@@ -33,7 +29,7 @@ class PhoneAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
-            return NotebookCategoryChoiceField(Category.objects.filter(slug='phone'))
+            return ModelChoiceField(Category.objects.filter(slug='phone'))
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
