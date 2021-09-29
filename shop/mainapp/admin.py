@@ -10,7 +10,7 @@ from django.forms import ModelChoiceField
 
 # @admin.register(Notebook)
 class NotebookAdmin(admin.ModelAdmin):
-    list_display = ('diagonal', 'display_type', 'processor_freq', 'ram', 'video', 'time_without_charge')
+    list_display = ('title', 'image', 'diagonal', 'display_type', 'processor_freq', 'ram', 'video', 'time_without_charge')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
@@ -25,7 +25,7 @@ class NotebookAdmin(admin.ModelAdmin):
 
 # @admin.register(Phone)
 class PhoneAdmin(admin.ModelAdmin):
-    list_display = ('diagonal', 'display_type', 'resolution', 'ram', 'accum_value', 'sd', 'sd_value_max', 'main_cam_mp', 'frontal_cam_mp')
+    list_display = ('title', 'image', 'diagonal', 'display_type', 'resolution', 'ram', 'accum_value', 'sd', 'sd_value_max', 'main_cam_mp', 'frontal_cam_mp')
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':

@@ -15,10 +15,13 @@ class LatestProductManager:
     def get_products_for_main_page(*args, **kwargs):
         with_respect_to = kwargs.get('with_respect_to')
         products = []
-        ct_models = ContentType.objects.filter(model__in=args)
-        for ct_model in ct_models:
-            model_product = ct_model.model_class()._base_manager.all().order_by('-id')[:5]
-            products.extend(model_product)
+        ct_models = ContentType.objects.filter(model__in=args)  # Получаем все модели по фильтру
+        for ct_model in ct_models:  # Проходимся по каждой модели
+            model_product = ct_model.model_class()._base_manager.all().order_by('-id')[:5]  # Т.к.ct_model это объект ContentType можно
+                                                                                            # получить класс модели методом model_class()
+                                                                                            # вернуть все объекты класса и отсортировать
+                                                                                            # по id с конца
+            products.extend(model_product) # добавляем в список все полученные объекты класса
         if with_respect_to:
             ct_model = ContentType.objects.filter(model=with_respect_to)
             if ct_model.exists():
@@ -30,8 +33,9 @@ class LatestProductManager:
 
 
 class LatestProducts:
-
     objects = LatestProductManager()
+
+
 """--------------------------------------------------------------------------------"""
 
 
@@ -44,7 +48,6 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-
     class Meta:
         abstract = True  # Не создает миграцию в БД, но может использоваться как родительский класс (Product)
 
@@ -87,12 +90,11 @@ class Phone(Product):
 
 
 class CartProduct(models.Model):
-
     user = models.ForeignKey('Customer', verbose_name="Пользователь", on_delete=models.CASCADE)
     cart = models.ForeignKey("Cart", verbose_name="Корзина", on_delete=models.CASCADE, related_name="related_products")
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE) # Получает все модели
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)  # Получает все модели
     object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey("content_type", "object_id") # Автоматически связывает
+    content_object = GenericForeignKey("content_type", "object_id")  # Автоматически связывает
     qty = models.PositiveIntegerField(default=1)
     total_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name="Общая цена")
 
@@ -102,7 +104,7 @@ class CartProduct(models.Model):
 
 class Cart(models.Model):
     owner = models.ForeignKey("Customer", verbose_name="Владелец", on_delete=models.CASCADE)
-    products =models.ManyToManyField(CartProduct, blank=True, related_name="related_cart")
+    products = models.ManyToManyField(CartProduct, blank=True, related_name="related_cart")
     total_products = models.PositiveIntegerField(default=0)
     final_price = models.DecimalField(max_digits=9, decimal_places=2, verbose_name="Общая цена")
 
@@ -117,8 +119,3 @@ class Customer(models.Model):
 
     def __str__(self):
         return f"Покупатель {self.user.first_name} {self.user.last_name}"
-
-
-
-
-
